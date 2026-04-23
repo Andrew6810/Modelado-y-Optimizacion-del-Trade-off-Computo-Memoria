@@ -1,0 +1,22 @@
+#!/bin/bash
+#SBATCH --job-name=train_VGG_16_bs64
+#SBATCH --partition=amd
+#SBATCH --nodelist=smexa
+#SBATCH --time=6:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=128
+#SBATCH --mem=10000
+#SBATCH --gres=gpu:1
+#SBATCH --output=/home/sgflores/tesis/train_VGG_16_bs64.%j.out
+#SBATCH --error=/home/sgflores/tesis/train_VGG_16_bs64.%j.err
+
+module purge
+source /home/sgflores/miniconda3/etc/profile.d/conda.sh
+conda activate pytorch_amd
+cd /home/sgflores/tesis
+
+python3 entrenamiento_cnn_sc3.py --batch_size 64 --arch VGG-16
+
+echo "[JOB train_VGG_16_bs64] Entrenamiento terminado"
+wc -l /home/sgflores/tesis/entrenamiento_VGG_16_bs64.csv 2>/dev/null
+wc -l /home/sgflores/tesis/curvas_VGG_16_bs64.csv 2>/dev/null
