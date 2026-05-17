@@ -1,0 +1,22 @@
+#!/bin/bash
+#SBATCH --job-name=train_MLP_7_bs64
+#SBATCH --partition=amd
+#SBATCH --nodelist=smexa
+#SBATCH --time=6:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=128
+#SBATCH --mem=10000
+#SBATCH --gres=gpu:1
+#SBATCH --output=/home/sgflores/tesis/amd_MLP_7_bs64.%j.out
+#SBATCH --error=/home/sgflores/tesis/amd_MLP_7_bs64.%j.err
+
+module purge
+source /home/sgflores/miniconda3/etc/profile.d/conda.sh
+conda activate pytorch_amd
+cd /home/sgflores/tesis
+
+python3 entrenamiento_mlp_amd.py --batch_size 64 --arch MLP-7
+
+echo "[JOB train_MLP_7_bs64] Entrenamiento terminado"
+wc -l /home/sgflores/tesis/entrenamiento_amd_MLP_7_bs64.csv 2>/dev/null
+wc -l /home/sgflores/tesis/curvas_amd_MLP_7_bs64.csv 2>/dev/null
